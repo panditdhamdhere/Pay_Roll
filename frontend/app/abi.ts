@@ -1,0 +1,178 @@
+// PayrollStream ABI
+export const PAYROLL_STREAM_ABI = [
+    {
+        type: 'constructor',
+        inputs: [{ name: '_protocolTreasury', type: 'address', internalType: 'address' }],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        name: 'createStream',
+        inputs: [
+            { name: 'employee', type: 'address', internalType: 'address' },
+            { name: 'salary', type: 'uint256', internalType: 'uint256' },
+            { name: 'depositToken', type: 'address', internalType: 'address' },
+            { name: 'paymentToken', type: 'address', internalType: 'address' },
+            { name: 'startTime', type: 'uint256', internalType: 'uint256' },
+            { name: 'duration', type: 'uint256', internalType: 'uint256' },
+        ],
+        outputs: [{ name: 'streamId', type: 'uint256', internalType: 'uint256' }],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        name: 'depositToStream',
+        inputs: [
+            { name: 'streamId', type: 'uint256', internalType: 'uint256' },
+            { name: 'amount', type: 'uint256', internalType: 'uint256' },
+        ],
+        outputs: [],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        name: 'claimSalary',
+        inputs: [{ name: 'streamId', type: 'uint256', internalType: 'uint256' }],
+        outputs: [{ name: 'claimed', type: 'uint256', internalType: 'uint256' }],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        name: 'getClaimableAmount',
+        inputs: [{ name: 'streamId', type: 'uint256', internalType: 'uint256' }],
+        outputs: [{ name: 'claimable', type: 'uint256', internalType: 'uint256' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        name: 'getStream',
+        inputs: [{ name: 'streamId', type: 'uint256', internalType: 'uint256' }],
+        outputs: [
+            {
+                name: '',
+                type: 'tuple',
+                internalType: 'struct PayrollStream.Stream',
+                components: [
+                    { name: 'employer', type: 'address', internalType: 'address' },
+                    { name: 'employee', type: 'address', internalType: 'address' },
+                    { name: 'salary', type: 'uint256', internalType: 'uint256' },
+                    { name: 'depositToken', type: 'address', internalType: 'address' },
+                    { name: 'paymentToken', type: 'address', internalType: 'address' },
+                    { name: 'startTime', type: 'uint256', internalType: 'uint256' },
+                    { name: 'endTime', type: 'uint256', internalType: 'uint256' },
+                    { name: 'lastClaimTime', type: 'uint256', internalType: 'uint256' },
+                    { name: 'totalClaimed', type: 'uint256', internalType: 'uint256' },
+                    { name: 'depositedAmount', type: 'uint256', internalType: 'uint256' },
+                    { name: 'active', type: 'bool', internalType: 'bool' },
+                    { name: 'paused', type: 'bool', internalType: 'bool' },
+                ],
+            },
+        ],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        name: 'getEmployeeStreams',
+        inputs: [{ name: 'employee', type: 'address', internalType: 'address' }],
+        outputs: [{ name: '', type: 'uint256[]', internalType: 'uint256[]' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        name: 'getEmployerStreams',
+        inputs: [{ name: 'employer', type: 'address', internalType: 'address' }],
+        outputs: [{ name: '', type: 'uint256[]', internalType: 'uint256[]' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        name: 'pauseStream',
+        inputs: [{ name: 'streamId', type: 'uint256', internalType: 'uint256' }],
+        outputs: [],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        name: 'resumeStream',
+        inputs: [{ name: 'streamId', type: 'uint256', internalType: 'uint256' }],
+        outputs: [],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        name: 'cancelStream',
+        inputs: [{ name: 'streamId', type: 'uint256', internalType: 'uint256' }],
+        outputs: [],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'event',
+        name: 'StreamCreated',
+        inputs: [
+            { name: 'streamId', type: 'uint256', indexed: true },
+            { name: 'employer', type: 'address', indexed: true },
+            { name: 'employee', type: 'address', indexed: true },
+            { name: 'salary', type: 'uint256', indexed: false },
+            { name: 'depositToken', type: 'address', indexed: false },
+            { name: 'paymentToken', type: 'address', indexed: false },
+            { name: 'startTime', type: 'uint256', indexed: false },
+            { name: 'duration', type: 'uint256', indexed: false },
+        ],
+    },
+    {
+        type: 'event',
+        name: 'PaymentClaimed',
+        inputs: [
+            { name: 'streamId', type: 'uint256', indexed: true },
+            { name: 'employee', type: 'address', indexed: true },
+            { name: 'amount', type: 'uint256', indexed: false },
+            { name: 'token', type: 'address', indexed: false },
+            { name: 'timestamp', type: 'uint256', indexed: false },
+        ],
+    },
+] as const;
+
+// ERC20 ABI (minimal for approvals and transfers)
+export const ERC20_ABI = [
+    {
+        type: 'function',
+        name: 'approve',
+        inputs: [
+            { name: 'spender', type: 'address' },
+            { name: 'amount', type: 'uint256' },
+        ],
+        outputs: [{ name: '', type: 'bool' }],
+        stateMutability: 'nonpayable',
+    },
+    {
+        type: 'function',
+        name: 'allowance',
+        inputs: [
+            { name: 'owner', type: 'address' },
+            { name: 'spender', type: 'address' },
+        ],
+        outputs: [{ name: '', type: 'uint256' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        name: 'balanceOf',
+        inputs: [{ name: 'account', type: 'address' }],
+        outputs: [{ name: '', type: 'uint256' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        name: 'decimals',
+        inputs: [],
+        outputs: [{ name: '', type: 'uint8' }],
+        stateMutability: 'view',
+    },
+    {
+        type: 'function',
+        name: 'symbol',
+        inputs: [],
+        outputs: [{ name: '', type: 'string' }],
+        stateMutability: 'view',
+    },
+] as const;
